@@ -1,0 +1,182 @@
+{
+  "info": {
+    "_postman_id": "95f91e60-c177-4bdb-aef8-4e31b10c49a0",
+    "name": "DressBook Mid-Term",
+    "description": "Postman requests organized by the assignment requirement IDs A1 through F2. Set collection variables to IDs and phone numbers from your seed data before running requests that need them. A1 is a model/persistence requirement and has no dedicated API route; its request lists customers as a basic persistence check.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:9090" },
+    { "key": "customerId", "value": "REPLACE_WITH_CUSTOMER_UUID" },
+    { "key": "tailorId", "value": "REPLACE_WITH_TAILOR_UUID" },
+    { "key": "garmentTypeId", "value": "REPLACE_WITH_GARMENT_TYPE_UUID" },
+    { "key": "tailoringOrderId", "value": "REPLACE_WITH_TAILORING_ORDER_UUID" },
+    { "key": "alterationId", "value": "REPLACE_WITH_ALTERATION_UUID" },
+    { "key": "phone", "value": "0788123456" }
+  ],
+  "item": [
+    {
+      "name": "A1",
+      "description": "Entity and relationship requirement. There is no dedicated A1 endpoint; this lists persisted customers as a basic API check.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/customers/all"
+      }
+    },
+    {
+      "name": "A2",
+      "description": "CRUD requirement for all five resource paths: garment-types, sewing-stations, tailors, customers, tailoring-orders. This representative request creates a customer; change method/path/body to exercise the other CRUD operations.",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"Demo\",\n  \"lastName\": \"Customer\",\n  \"phone\": \"0788000001\",\n  \"email\": \"demo@example.com\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/api/customers/save"
+      }
+    },
+    {
+      "name": "B1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/customers/by-last-name?lastName=keza"
+      }
+    },
+    {
+      "name": "B2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailoring-orders/by-status?status=ORDERED"
+      }
+    },
+    {
+      "name": "B3",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailoring-orders/between?start=2026-10-01&end=2026-10-31"
+      }
+    },
+    {
+      "name": "C1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailors/by-garment-type?name=dresses"
+      }
+    },
+    {
+      "name": "C2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/sewing-stations/free"
+      }
+    },
+    {
+      "name": "C3",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/garment-types/unused"
+      }
+    },
+    {
+      "name": "C4",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/customers/of-tailor/{{tailorId}}"
+      }
+    },
+    {
+      "name": "D1",
+      "description": "Safe order save. Replace the customer and tailor IDs with existing seed-data UUIDs and choose a future date.",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"dueDate\": \"2026-11-30\",\n  \"status\": \"READY\",\n  \"garmentDescription\": \"Demo order\",\n  \"price\": 100.0,\n  \"customer\": { \"id\": \"{{customerId}}\" },\n  \"tailor\": { \"id\": \"{{tailorId}}\" }\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/api/tailoring-orders/save"
+      }
+    },
+    {
+      "name": "D2",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailoring-orders/{{tailoringOrderId}}/status?status=STITCHING"
+      }
+    },
+    {
+      "name": "D3",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailors/{{tailorId}}/garment-types/{{garmentTypeId}}"
+      }
+    },
+    {
+      "name": "D4",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailors/{{tailorId}}/sewing-station?stationNumber=4"
+      }
+    },
+    {
+      "name": "E1",
+      "description": "The tailoring order must already exist and have READY status.",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"part\": \"Sleeve\",\n  \"instruction\": \"Shorten both sleeves\",\n  \"centimetres\": 2\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/api/alterations/save?tailoringOrderId={{tailoringOrderId}}"
+      }
+    },
+    {
+      "name": "E2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/alterations/customer/{{phone}}"
+      }
+    },
+    {
+      "name": "E3",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/alterations/delete/{{alterationId}}"
+      }
+    },
+    {
+      "name": "F1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailoring-orders/stats/by-status"
+      }
+    },
+    {
+      "name": "F2",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": "{{baseUrl}}/api/tailoring-orders/cancel-day?tailorId={{tailorId}}&date=2026-10-20"
+      }
+    }
+  ]
+}
